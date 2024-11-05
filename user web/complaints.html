@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HydroSense Dashboard - Complaints</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    html, body {
+      height: 100%;
+    }
+    #sidebar {
+      width: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-color: #f0f0f0;
+      color: black;
+      position: fixed;
+      z-index: 1;
+      transition: transform 0.3s ease;
+    }
+    #sidebar .nav-link {
+      color: black;
+    }
+    .nav-item {
+      margin-bottom: 20px;
+      border-bottom: 1px solid black;
+      padding-bottom: 10px;
+    }
+    .card {
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      margin-bottom: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .toggle-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      display: inline-block;
+      cursor: pointer;
+      background-color: #ddd;
+      border-radius: 12px;
+      padding: 5px 10px;
+      font-size: 14px;
+      color: #555;
+    }
+    .toggle-btn.on {
+      background-color: #28a745;
+      color: white;
+    }
+    .toggle-btn.off {
+      background-color: #dc3545;
+      color: white;
+    }
+    #complaints-container {
+      margin-left: 250px;
+      padding: 20px;
+    }
+    @media (max-width: 768px) {
+      #sidebar {
+        transform: translateX(-100%);
+      }
+      #sidebar.active {
+        transform: translateX(0);
+      }
+      #toggle-sidebar {
+        display: block;
+      }
+    }
+    @media (min-width: 769px) {
+      #toggle-sidebar {
+        display: none;
+      }
+    }
+    header {
+      margin-left: 250px;
+    }
+    @media (max-width: 768px) {
+      header, .main-content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Toggle button for smaller screens -->
+  <button id="toggle-sidebar" class="btn btn-primary m-3 d-md-none">☰ Menu</button>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="bg-light text-black p-3">
+    <img src="images/logo1.png" alt="HydroSense Logo" class="logo">
+    <ul class="nav flex-column">
+      <li class="nav-item"><a class="nav-link text-black" href="map.html">Map</a></li>
+      <li class="nav-item"><a class="nav-link text-black" href="dashboard.html">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link text-black" href="complaints.html">Complaints</a></li>
+      <li class="nav-item"><a class="nav-link text-black" href="maintain.html">Maintenance</a></li>
+      <li class="nav-item"><a class="nav-link text-black" href="report.html">Report</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="w-100 main-content">
+    <header class="p-3 bg-primary text-white">
+      <h1>HydroSense Dashboard - Complaints</h1>
+    </header>
+
+    <!-- Complaints Section -->
+    <div id="complaints-container" class="container">
+      <h2 class="my-4">Registered Complaints</h2>
+      <div id="complaints-list"></div> <!-- Complaints will be rendered here -->
+    </div>
+  </div>
+
+  <!-- Firebase Configuration and Initialization -->
+  <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore-compat.js"></script>
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyD3t1XScGrfq7zZJm2j3mqTe9tsPIrPEPw",
+      authDomain: "hydrsense.firebaseapp.com",
+      databaseURL: "https://hydrsense-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "hydrsense",
+      storageBucket: "hydrsense.appspot.com",
+      messagingSenderId: "999792379605",
+      appId: "1:999792379605:web:4e56aa84fed82600ec045c",
+      measurementId: "G-HY7LGW12T5"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    async function fetchComplaints() {
+      const complaintsContainer = document.getElementById('complaints-list');
+      complaintsContainer.innerHTML = ''; // Clear previous data if any
+
+      try {
+        const complaintsSnapshot = await db.collection("complaints").get();
+        if (!complaintsSnapshot.empty) {
+          complaintsSnapshot.forEach((doc) => {
+            const data = doc.data();
+            // Determine toggle status based on employee_id presence
+            const toggleStatus = data.employee_id ? 'on' : 'off';
+            const toggleLabel = toggleStatus === 'on' ? 'Assigned' : 'Unassigned';
+
+            // Create a Bootstrap Card for each complaint
+            const complaintCard = document.createElement('div');
+            complaintCard.classList.add('card', 'p-3', 'mb-4');
+
+            // Set inner HTML of the card with toggle button
+            complaintCard.innerHTML = `
+              <div class="card-body">
+                <span class="toggle-btn ${toggleStatus}">${toggleLabel}</span>
+                <h5 class="card-title">Complaint by: ${data.name}</h5>
+                <p class="card-text"><strong>Phone:</strong> ${data.phone}</p>
+                <p class="card-text"><strong>Email:</strong> ${data.email}</p>
+                <p class="card-text"><strong>Location:</strong> ${data.location}</p>
+                <p class="card-text"><strong>Complaint:</strong> ${data.complaint}</p>
+              </div>
+            `;
+            complaintsContainer.appendChild(complaintCard);
+          });
+        } else {
+          complaintsContainer.innerHTML = '<p>No complaints found.</p>';
+        }
+      } catch (error) {
+        console.error("Error fetching complaints:", error);
+        complaintsContainer.innerHTML = '<p>Error loading complaints. Please try again later.</p>';
+      }
+    }
+
+    // Fetch complaints when page loads
+    window.onload = fetchComplaints;
+  </script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
