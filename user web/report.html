@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HydroSense Dashboard - Complaints</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    html, body {
+      height: 100%;
+    }
+    #sidebar {
+      width: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-color: #f0f0f0;
+      color: black;
+      position: fixed;
+      z-index: 1;
+      transition: transform 0.3s ease;
+    }
+    #sidebar .nav-link {
+      color: black;
+    }
+    .nav-item {
+      margin-bottom: 20px;
+      border-bottom: 1px solid black;
+      padding-bottom: 10px;
+    }
+    .card {
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      margin-bottom: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .toggle-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      display: inline-block;
+      cursor: pointer;
+      background-color: #ddd;
+      border-radius: 12px;
+      padding: 5px 10px;
+      font-size: 14px;
+      color: #555;
+    }
+    .toggle-btn.on {
+      background-color: #28a745;
+      color: white;
+    }
+    .toggle-btn.off {
+      background-color: #dc3545;
+      color: white;
+    }
+    #complaints-container {
+      margin-left: 199px;
+      padding-left: 50px;
+    }
+    @media (max-width: 768px) {
+      #sidebar {
+        transform: translateX(-100%);
+      }
+      #sidebar.active {
+        transform: translateX(0);
+      }
+      #toggle-sidebar {
+        display: block;
+      }
+    }
+    @media (min-width: 769px) {
+      #toggle-sidebar {
+        display: none;
+      }
+    }
+    header {
+      margin-left: 250px;
+    }
+    @media (max-width: 768px) {
+      header, .main-content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Toggle button for smaller screens -->
+  <button id="toggle-sidebar" class="btn btn-primary m-3 d-md-none">☰ Menu</button>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="bg-light text-black p-3">
+    <img src="images/logo1.png" alt="HydroSense Logo" class="logo">
+    <ul class="nav flex-column">
+      <li class="nav-item"><a class="nav-link text-black" href="map.html">Map</a></li>
+      <li class="nav-item"><a class="nav-link text-black" href="dashboard.html">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link text-black" href="complaints.html">Complaints</a></li>
+      <li class="nav-item"><a class="nav-link text-black" href="maintain.html">Maintenance</a></li>
+      <li class="nav-item"><a class="nav-link text-black" href="report.html">Report</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="w-100 main-content">
+    <header class="p-3 bg-primary text-white">
+      <h1>HydroSense Report Dashboard</h1>
+    </header>
+
+    <!-- Complaints Section -->
+    <div id="complaints-container" class="container">
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+            <style>
+                body {
+                    background-color: #f8f9fa;
+                }
+                #report-container {
+                    padding: 20px;
+                }
+                .card {
+                    border-radius: 10px;
+                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+                    margin-bottom: 20px;
+                }
+                .chart-container {
+                    position: relative;
+                    margin: auto;
+                    height: 30vh;
+                    width: 100%;
+                }
+                .download-btn {
+                    margin-top: 20px;
+                }
+            </style>
+        </head>
+        <body>
+        
+            <div id="report-container" class="container">
+        
+                <!-- Summary Section -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Executive Summary</h5>
+                        <p class="card-text">
+                            This report summarizes key metrics of water usage, maintenance requests, and user satisfaction for Q3 2024. Insights derived will guide operational improvements and enhance customer service.
+                        </p>
+                    </div>
+                </div>
+        
+                <!-- Statistics Section -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Highlights</h5>
+                        <ul>
+                            <li><strong>Total Water Usage:</strong> 35,000 Liters</li>
+                            <li><strong>Avg. Maintenance Requests:</strong> 15/month</li>
+                            <li><strong>Avg. Response Time:</strong> 3.5 hours</li>
+                            <li><strong>User Satisfaction:</strong> 4.6/5</li>
+                        </ul>
+                    </div>
+                </div>
+        
+                <!-- Graphs Section -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Water Usage Trends</h5>
+                                <div class="chart-container">
+                                    <canvas id="waterUsageChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Maintenance Requests</h5>
+                                <div class="chart-container">
+                                    <canvas id="maintenanceRequestsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Response Time Analysis</h5>
+                                <div class="chart-container">
+                                    <canvas id="responseTimeChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">User Satisfaction Ratings</h5>
+                                <div class="chart-container">
+                                    <canvas id="satisfactionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <button class="btn btn-success download-btn" onclick="downloadReport()">Download Report</button>
+            </div>
+        
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                // Chart Data
+                const waterUsageData = [5000, 6000, 7000, 8000, 6000, 5000, 8000];
+                const maintenanceRequestsData = [8, 10, 12, 15, 20, 18, 16];
+                const responseTimeData = [4, 3, 2, 3, 4, 2, 1];
+                const satisfactionData = [4.5, 4.7, 4.6, 4.8, 4.9, 4.4, 4.6];
+        
+                // Monthly Water Usage Chart
+                const ctxWaterUsage = document.getElementById('waterUsageChart').getContext('2d');
+                const waterUsageChart = new Chart(ctxWaterUsage, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'],
+                        datasets: [{
+                            label: 'Water Usage (Liters)',
+                            data: waterUsageData,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            fill: true,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: true
+                            }
+                        }
+                    }
+                });
+        
+                // Maintenance Requests Chart
+                const ctxMaintenanceRequests = document.getElementById('maintenanceRequestsChart').getContext('2d');
+                const maintenanceRequestsChart = new Chart(ctxMaintenanceRequests, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'],
+                        datasets: [{
+                            label: 'Requests',
+                            data: maintenanceRequestsData,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: true
+                            }
+                        }
+                    }
+                });
+        
+                // Average Response Time Chart
+                const ctxResponseTime = document.getElementById('responseTimeChart').getContext('2d');
+                const responseTimeChart = new Chart(ctxResponseTime, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'],
+                        datasets: [{
+                            label: 'Response Time (Hours)',
+                            data: responseTimeData,
+                            borderColor: 'rgba(255, 206, 86, 1)',
+                            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                            fill: true,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: true
+                            }
+                        }
+                    }
+                });
+        
+                // User Satisfaction Ratings Chart
+                const ctxSatisfaction = document.getElementById('satisfactionChart').getContext('2d');
+                const satisfactionChart = new Chart(ctxSatisfaction, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'],
+                        datasets: [{
+                            label: 'Satisfaction Rating',
+                            data: satisfactionData,
+                            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                            borderColor: 'rgba(153, 102, 255, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: true
+                            }
+                        }
+                    }
+                });
+        
+                // Download Report Function
+                function downloadReport() {
+                    const reportData = `
+                        HydroSense Dashboard - Q3 2024 Report\n
+                        Total Water Usage: 35,000 Liters\n
+                        Avg. Maintenance Requests: 15/month\n
+                        Avg. Response Time: 3.5 hours\n
+                        User Satisfaction: 4.6/5\n
+                        Water Usage Data: ${waterUsageData.join(', ')}\n
+                        Maintenance Requests Data: ${maintenanceRequestsData.join(', ')}\n
+                        Response Times: ${responseTimeData.join(', ')}\n
+                        Satisfaction Ratings: ${satisfactionData.join(', ')}\n
+                    `;
+                    const blob = new Blob([reportData], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'HydroSense_Report_Q3_2024.txt';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }
+            </script>
+        </body>
+        </html>
+      <div id="complaints-list"></div> <!-- Complaints will be rendered here -->
+    </div>
+  </div>
