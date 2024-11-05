@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Data from AWS IoT</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/mqttws31.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 50%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Real-Time Flow Data</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Flow Rate In (L/min)</th>
+                <th>Flow Rate Out (L/min)</th>
+                <th>Leak Detected</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody id="data-table-body">
+            <tr>
+                <td id="flow-rate-in">0.00</td>
+                <td id="flow-rate-out">0.00</td>
+                <td id="leak-detected">No</td>
+                <td id="timestamp">-</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        // AWS IoT endpoint and connection parameters
+        const awsIotEndpoint = "wss://a1519v3a8mrxlc-ats.iot.us-east-1.amazonaws.com/mqtt"; // Ensure correct endpoint
+        const options = {
+            clientId: "web_client_" + Math.random().toString(16).substr(2, 8),
+            protocolVersion: 4,
+            keepalive: 60,
+            clean: true,
+            reconnectPeriod: 1000,
+            connectTimeout: 30 * 1000,
+        };
+
+        // Connect to AWS IoT
+        const client = new Paho.MQTT.Client(awsIotEndpoint, options.clientId);
+
+        client.onConnect = function () {
+            console.log("Connected to AWS IoT");
+            client.subscribe("esp32/pub", { qos: 1 }, function (err) {
+                if (!err) {
+                    console.log("Subscribed to esp32/pub");
+                } else {
+                    console.error("Subscription error: ", err);
+                }
+            });
+        };
+
+        client.onMessageArrived = function (message) {
+            console.log("Message received: ", message.payloadString);
+            const data = JSON.parse(message.payloadString);
+            document.getElementById("flow-rate-in").innerText = data.flow_rate_in.toFixed(2);
+            document.getElementById("flow-rate-out").innerText = data.flow_rate_out.toFixed(2);
+            document.getElementById("leak-detected").innerText = data.leak_detected ? "Yes" : "No";
+            document.getElementById("timestamp").innerText = data.timestamp;
+        };
+
+        client.onError = function (error) {
+            console.error("Connection error: ", error);
+        };
+
+        client.connect({
+            onSuccess: client.onConnect,
+            onFailure: function (message) {
+                console.error("Connection failed: ", message);
+            },
+            useSSL: true,
+        });
+    </script>
+</body>
+</html>
