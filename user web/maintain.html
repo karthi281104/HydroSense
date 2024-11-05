@@ -3,93 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-Time Data from AWS IoT</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/mqttws31.min.js"></script>
+    <title>Hydrosense Maintenance</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            background-color: #e0f7fa;
+            color: #01579b;
+            margin: 0;
+            padding: 0;
         }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0277bd;
+        }
+
+        .section {
+            background: #b3e5fc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 87, 157, 0.2);
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        h2 {
+            color: #0288d1;
+            border-bottom: 2px solid #0288d1;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        .button {
+            background-color: #0277bd;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #01579b;
+        }
+
         table {
-            width: 50%;
+            width: 100%;
             border-collapse: collapse;
+            margin: 15px 0;
         }
-        table, th, td {
-            border: 1px solid black;
-        }
+
         th, td {
-            padding: 10px;
+            padding: 12px;
             text-align: left;
+            border-bottom: 1px solid #0288d1;
+        }
+
+        th {
+            background-color: #0288d1;
+            color: white;
+        }
+
+        .table-section {
+            overflow-x: auto;
         }
     </style>
 </head>
 <body>
-    <h1>Real-Time Flow Data</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Flow Rate In (L/min)</th>
-                <th>Flow Rate Out (L/min)</th>
-                <th>Leak Detected</th>
-                <th>Timestamp</th>
-            </tr>
-        </thead>
-        <tbody id="data-table-body">
-            <tr>
-                <td id="flow-rate-in">0.00</td>
-                <td id="flow-rate-out">0.00</td>
-                <td id="leak-detected">No</td>
-                <td id="timestamp">-</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="container">
+        <h1>Hydrosense Maintenance Dashboard</h1>
 
-    <script>
-        // AWS IoT endpoint and connection parameters
-        const awsIotEndpoint = "wss://a1519v3a8mrxlc-ats.iot.us-east-1.amazonaws.com/mqtt"; // Ensure correct endpoint
-        const options = {
-            clientId: "web_client_" + Math.random().toString(16).substr(2, 8),
-            protocolVersion: 4,
-            keepalive: 60,
-            clean: true,
-            reconnectPeriod: 1000,
-            connectTimeout: 30 * 1000,
-        };
+        <!-- Tier Management Section -->
+        <div class="section">
+            <h2>Tier Management</h2>
+            <p>Adjust and reassign regions to appropriate tiers based on priority and complaint volume.</p>
+            <div class="table-section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Region</th>
+                            <th>Current Tier</th>
+                            <th>Reassign Tier</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>T. Nagar</td>
+                            <td>Tier 1</td>
+                            <td>
+                                <select>
+                                    <option>Tier 1</option>
+                                    <option>Tier 2</option>
+                                    <option>Tier 3</option>
+                                </select>
+                            </td>
+                            <td><button class="button" onclick="alert('Tier updated for T. Nagar')">Update</button></td>
+                        </tr>
+                        <tr>
+                            <td>Adyar</td>
+                            <td>Tier 2</td>
+                            <td>
+                                <select>
+                                    <option>Tier 1</option>
+                                    <option>Tier 2</option>
+                                    <option>Tier 3</option>
+                                </select>
+                            </td>
+                            <td><button class="button" onclick="alert('Tier updated for Adyar')">Update</button></td>
+                        </tr>
+                        <tr>
+                            <td>Tambaram</td>
+                            <td>Tier 3</td>
+                            <td>
+                                <select>
+                                    <option>Tier 1</option>
+                                    <option>Tier 2</option>
+                                    <option>Tier 3</option>
+                                </select>
+                            </td>
+                            <td><button class="button" onclick="alert('Tier updated for Tambaram')">Update</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-        // Connect to AWS IoT
-        const client = new Paho.MQTT.Client(awsIotEndpoint, options.clientId);
+        <!-- Predictive Leak Management Section -->
+        <div class="section">
+            <h2>Predictive Leak Management</h2>
+            <p>Review zones flagged for potential leaks based on seasonal analysis.</p>
+            <div class="table-section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Zone ID</th>
+                            <th>Predicted Leak Risk</th>
+                            <th>Inspection Required</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Z-101 (Anna Nagar)</td>
+                            <td>High</td>
+                            <td>Yes</td>
+                            <td><button class="button" onclick="alert('Inspection scheduled for Z-101')">Schedule Inspection</button></td>
+                        </tr>
+                        <tr>
+                            <td>Z-202 (Velachery)</td>
+                            <td>Medium</td>
+                            <td>No</td>
+                            <td><button class="button" onclick="alert('Inspection scheduled for Z-202')">Schedule Inspection</button></td>
+                        </tr>
+                        <tr>
+                            <td>Z-303 (Mylapore)</td>
+                            <td>Low</td>
+                            <td>No</td>
+                            <td><button class="button" onclick="alert('Inspection scheduled for Z-303')">Schedule Inspection</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-        client.onConnect = function () {
-            console.log("Connected to AWS IoT");
-            client.subscribe("esp32/pub", { qos: 1 }, function (err) {
-                if (!err) {
-                    console.log("Subscribed to esp32/pub");
-                } else {
-                    console.error("Subscription error: ", err);
-                }
-            });
-        };
+        <!-- Quarterly Maintenance Scheduling Section -->
+        <div class="section">
+            <h2>Quarterly Maintenance Schedule</h2>
+            <p>Schedule inspections and assign employees to high-priority zones.</p>
+            <div class="table-section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Zone ID</th>
+                            <th>Scheduled Date</th>
+                            <th>Assigned Employee</th>
+                            <th>Inspection Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Z-101 (Anna Nagar)</td>
+                            <td>2024-12-15</td>
+                            <td>Employee 1</td>
+                            <td>Pending</td>
+                            <td><button class="button" onclick="alert('Inspection completed for Z-101')">Mark as Complete</button></td>
+                        </tr>
+                        <tr>
+                            <td>Z-202 (Velachery)</td>
+                            <td>2024-12-18</td>
+                            <td>Employee 2</td>
+                            <td>Pending</td>
+                            <td><button class="button" onclick="alert('Inspection completed for Z-202')">Mark as Complete</button></td>
+                        </tr>
+                        <tr>
+                            <td>Z-303 (Mylapore)</td>
+                            <td>2024-12-20</td>
+                            <td>Employee 3</td>
+                            <td>Pending</td>
+                            <td><button class="button" onclick="alert('Inspection completed for Z-303')">Mark as Complete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button class="button" onclick="alert('New inspection scheduled')">Schedule New Inspection</button>
+        </div>
 
-        client.onMessageArrived = function (message) {
-            console.log("Message received: ", message.payloadString);
-            const data = JSON.parse(message.payloadString);
-            document.getElementById("flow-rate-in").innerText = data.flow_rate_in.toFixed(2);
-            document.getElementById("flow-rate-out").innerText = data.flow_rate_out.toFixed(2);
-            document.getElementById("leak-detected").innerText = data.leak_detected ? "Yes" : "No";
-            document.getElementById("timestamp").innerText = data.timestamp;
-        };
-
-        client.onError = function (error) {
-            console.error("Connection error: ", error);
-        };
-
-        client.connect({
-            onSuccess: client.onConnect,
-            onFailure: function (message) {
-                console.error("Connection failed: ", message);
-            },
-            useSSL: true,
-        });
-    </script>
+        <!-- Historical Reports Section -->
+        <div class="section">
+            <h2>Maintenance and Leak Reports</h2>
+            <p>Access historical maintenance and leak reports for review and analysis.</p>
+            <button class="button" onclick="alert('Opening historical reports...')">View Historical Reports</button>
+        </div>
+    </div>
 </body>
 </html>
