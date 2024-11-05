@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HydroSense Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="app.js" defer></script>
+</head>
+<body>
+    <!-- Login Selection Page -->
+    <div class="container" id="login-selection">
+        <h1>Welcome to HydroSense</h1>
+        <p>Choose your login type:</p>
+        <button id="user-login-option" class="animated-button">User Login</button>
+        <button id="gov-login-option" class="animated-button">Government Login</button>
+    </div>
+
+    <!-- User Authentication Container -->
+    <div class="container hidden" id="user-auth-container">
+        <div id="signup-form" class="auth-form hidden">
+            <h2>Sign Up</h2>
+            <input type="email" id="signup-email" placeholder="Email" required>
+            <input type="password" id="signup-password" placeholder="Password" required>
+            <button id="signup-button">Sign Up</button>
+            <p>Already have an account? <a href="#" id="switch-to-user-login">Log In</a></p>
+        </div>
+
+        <div id="login-form" class="auth-form">
+            <h2>User Login</h2>
+            <input type="email" id="user-email" placeholder="Email" required>
+            <input type="password" id="user-password" placeholder="Password" required>
+            <button id="user-login-button">Log In</button>
+            <p>New user? <a href="#" id="switch-to-signup">Create an Account</a></p>
+        </div>
+    </div>
+
+    <!-- Government Login Form -->
+    <div class="container hidden" id="gov-auth-container">
+        <h2>Government Login</h2>
+        <input type="email" id="gov-email" placeholder="Government Email" required>
+        <input type="password" id="gov-password" placeholder="Password" required>
+        <button id="gov-login-button">Log In</button>
+    </div>
+</body>
+</html>
