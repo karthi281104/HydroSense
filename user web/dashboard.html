@@ -232,7 +232,7 @@
       const data = snapshot.val();
       document.getElementById('fm1-reading').textContent = `FM1-1-1: ${data.flow_meter1} m³`;
       document.getElementById('fm2-reading').textContent = `FM2-1-1: ${data.flow_meter2} m³`;
-      document.getElementById('leak-status').textContent = `PM-1-1: ${data.pressure_meter}`;
+      document.getElementById('leak-status').textContent = `PM-1-1: ${data.leak_status}`;
     });
   </script>
   <script>
